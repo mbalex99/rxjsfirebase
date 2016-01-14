@@ -1,6 +1,6 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "RxJS Beta 5 wrapper around firebase",
   "main": "dist/RxFirebase.js",
   "scripts": {
