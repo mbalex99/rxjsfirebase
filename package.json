@@ -1,10 +1,14 @@
 {
-  "name": "RxJSFirebase",
+  "name": "rxjsfirebase",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "RxJS Beta 5 wrapper around firebase",
+  "main": "dist/RxFirebase.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/mbalex99/rxjsfirebase"
   },
   "dependencies": {
     "firebase": "2.3.2",

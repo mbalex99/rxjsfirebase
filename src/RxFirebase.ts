@@ -33,7 +33,8 @@ export class RxFirebase {
     }
     
 	query: FirebaseQuery
-	constructor(query: FirebaseQuery){
+	constructor(query: FirebaseQuery)
+    {
 		this.query = query
 	}
 	
