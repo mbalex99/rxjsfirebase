@@ -5,12 +5,10 @@
     "noLib": false,
     "sourceMap": false,
     "module": "commonjs",
-    "moduleResolution": "node",
     "declaration": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5",
-    "outFile": "js/index.js"
+    "target": "es5"
   },
   "formatCodeOptions": {
     "indentSize": 2,

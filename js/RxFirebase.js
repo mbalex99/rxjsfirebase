@@ -180,5 +180,3 @@ var RxFirebase = (function () {
     return RxFirebase;
 })();
 exports.RxFirebase = RxFirebase;
-
-
