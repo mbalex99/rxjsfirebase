@@ -1,4 +1,4 @@
-var Rx_1 = require('rxjs/Rx');
+var rxjs_1 = require('@reactivex/rxjs');
 (function (EventType) {
     EventType[EventType["CHILD_ADDED"] = 0] = "CHILD_ADDED";
     EventType[EventType["CHILD_REMOVED"] = 1] = "CHILD_REMOVED";
@@ -48,7 +48,7 @@ var RxFirebase = (function () {
     };
     RxFirebase.prototype.rx_observeAuth = function () {
         var self = this;
-        return new Rx_1.Observable(function (subscriber) {
+        return new rxjs_1.Observable(function (subscriber) {
             var listener = function (authData) {
                 subscriber.next(authData);
             };
@@ -67,7 +67,7 @@ var RxFirebase = (function () {
     };
     RxFirebase.prototype.rx_remove = function () {
         var self = this;
-        return new Rx_1.Observable(function (subscriber) {
+        return new rxjs_1.Observable(function (subscriber) {
             self.ref.remove(function (err) {
                 if (err != null) {
                     subscriber.error(err);
@@ -82,7 +82,7 @@ var RxFirebase = (function () {
     };
     RxFirebase.prototype.rx_set = function (data) {
         var self = this;
-        return new Rx_1.Observable(function (subscriber) {
+        return new rxjs_1.Observable(function (subscriber) {
             self.ref.set(data, function (err) {
                 if (err != null) {
                     subscriber.error(err);
@@ -98,7 +98,7 @@ var RxFirebase = (function () {
     };
     RxFirebase.prototype.rx_update = function (data) {
         var self = this;
-        return new Rx_1.Observable(function (subscriber) {
+        return new rxjs_1.Observable(function (subscriber) {
             self.ref.update(data, function (err) {
                 if (err != null) {
                     subscriber.error(err);
@@ -114,7 +114,7 @@ var RxFirebase = (function () {
     };
     RxFirebase.prototype.rx_authWithCustomToken = function (customToken) {
         var self = this;
-        return new Rx_1.Observable(function (subscriber) {
+        return new rxjs_1.Observable(function (subscriber) {
             self.ref.authWithCustomToken(customToken, function (err, authData) {
                 if (err) {
                     subscriber.error(err);
@@ -128,7 +128,7 @@ var RxFirebase = (function () {
     };
     RxFirebase.prototype.rx_observe = function (eventType) {
         var self = this;
-        return new Rx_1.Observable(function (subscriber) {
+        return new rxjs_1.Observable(function (subscriber) {
             var callback = function (snapshot, siblingKey) {
                 subscriber.next(new RxFirebasePayload(snapshot, siblingKey));
             };

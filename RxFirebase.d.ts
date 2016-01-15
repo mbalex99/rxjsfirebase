@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable } from '@reactivex/rxjs';
 import * as Firebase from 'firebase';
 export declare enum EventType {
     CHILD_ADDED = 0,
