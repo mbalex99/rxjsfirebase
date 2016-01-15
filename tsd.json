@@ -2,8 +2,8 @@
   "version": "v4",
   "repo": "borisyankov/DefinitelyTyped",
   "ref": "master",
-  "path": "src/typings",
-  "bundle": "src/typings/tsd.d.ts",
+  "path": "ts/typings",
+  "bundle": "ts/typings/tsd.d.ts",
   "installed": {
     "firebase/firebase.d.ts": {
       "commit": "d1f6bde13f2209be42e86c3686761e8bfcbb50a5"

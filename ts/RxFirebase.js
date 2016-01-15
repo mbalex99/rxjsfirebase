@@ -180,4 +180,3 @@ var RxFirebase = (function () {
     return RxFirebase;
 })();
 exports.RxFirebase = RxFirebase;
-//# sourceMappingURL=RxFirebase.js.map

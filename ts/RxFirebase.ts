@@ -1,4 +1,5 @@
 import {Observable, Subscriber} from 'rxjs/Rx'
+import * as Firebase from 'firebase'
 
 export enum EventType {
 	CHILD_ADDED, CHILD_REMOVED, CHILD_CHANGED, CHILD_MOVED, VALUE

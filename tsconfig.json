@@ -2,13 +2,15 @@
   "compilerOptions": {
     "removeComments": false,
     "preserveConstEnums": true,
-    "sourceMap": true,
+    "noLib": false,
+    "sourceMap": false,
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
-    "outDir": "dist"
+    "outFile": "js/index.js"
   },
   "formatCodeOptions": {
     "indentSize": 2,
