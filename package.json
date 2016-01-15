@@ -1,6 +1,6 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "RxJS Beta 5 wrapper around firebase",
   "main": "js/RxFirebase.js",
   "scripts": {
@@ -11,10 +11,9 @@
     "url": "https://github.com/mbalex99/rxjsfirebase"
   },
   "dependencies": {
-    "del": "2.2.0",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.3",
-    "firebase": "2.3.2",
+    "firebase": "^2.3.2",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.0",
     "zone.js": "0.5.10"
@@ -23,6 +22,7 @@
   "author": "Maximilian Alexander <mbalex99@gmail.com> (http://blog.edenmsg.com/)",
   "license": "MIT",
   "devDependencies": {
+    "del": "2.2.0",
     "gulp": "3.9.0",
     "gulp-concat": "2.6.0",
     "gulp-sourcemaps": "1.6.0",
