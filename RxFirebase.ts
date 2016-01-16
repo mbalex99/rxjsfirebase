@@ -169,6 +169,16 @@ export class RxFirebase {
         return new RxFirebase(newQuery);
     }
     
+    startAt(value: string, key?: string): RxFirebase {
+        let newQuery = this.query.startAt(value, key)
+        return new RxFirebase(newQuery);
+    }
+    
+    endAt(value: string, key?: string): RxFirebase {
+        let newQuery = this.query.endAt(value, key)
+        return new RxFirebase(newQuery);
+    }
+    
 	private convertToString(eventType: EventType) : string {
 		switch (eventType) {
 			case EventType.CHILD_ADDED:
