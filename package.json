@@ -1,8 +1,7 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "RxJS Beta 5 wrapper around firebase",
-  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,7 +10,7 @@
     "url": "https://github.com/mbalex99/rxjsfirebase"
   },
   "typescript": {
-    "definition": "dist/index.d.ts"
+    "definition": "index.d.ts"
   },
   "dependencies": {
     "firebase": "^2.3.2",
