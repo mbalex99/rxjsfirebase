@@ -1,6 +1,6 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
