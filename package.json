@@ -16,6 +16,7 @@
     "firebase": "^2.3.2",
     "@reactivex/rxjs": "5.0.0-beta.1"
   },
+  "typings": "./index.d.ts",
   "keywords": [],
   "author": "Maximilian Alexander <mbalex99@gmail.com> (http://blog.edenmsg.com/)",
   "license": "MIT"
