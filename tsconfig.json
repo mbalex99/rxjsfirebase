@@ -8,7 +8,9 @@
     "declaration": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5"
+    "target": "es5",
+    "outDir": "dist",
+    "outFile": "index.js"
   },
   "formatCodeOptions": {
     "indentSize": 2,

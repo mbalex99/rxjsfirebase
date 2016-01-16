@@ -35,5 +35,7 @@ export declare class RxFirebase {
     orderByValue(): RxFirebase;
     orderByPriority(): RxFirebase;
     limitToLast(limit: number): RxFirebase;
+    startAt(value: string, key?: string): RxFirebase;
+    endAt(value: string, key?: string): RxFirebase;
     private convertToString(eventType);
 }

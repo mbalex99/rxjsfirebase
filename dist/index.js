@@ -156,6 +156,14 @@ var RxFirebase = (function () {
         var newQuery = this.query.limitToLast(limit);
         return new RxFirebase(newQuery);
     };
+    RxFirebase.prototype.startAt = function (value, key) {
+        var newQuery = this.query.startAt(value, key);
+        return new RxFirebase(newQuery);
+    };
+    RxFirebase.prototype.endAt = function (value, key) {
+        var newQuery = this.query.endAt(value, key);
+        return new RxFirebase(newQuery);
+    };
     RxFirebase.prototype.convertToString = function (eventType) {
         switch (eventType) {
             case EventType.CHILD_ADDED:
