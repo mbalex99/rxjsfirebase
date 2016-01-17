@@ -1,4 +1,4 @@
-var rxjs_1 = require('@reactivex/rxjs');
+var rxjs_1 = require('rxjs');
 (function (EventType) {
     EventType[EventType["CHILD_ADDED"] = 0] = "CHILD_ADDED";
     EventType[EventType["CHILD_REMOVED"] = 1] = "CHILD_REMOVED";

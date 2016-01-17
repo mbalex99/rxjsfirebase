@@ -1,8 +1,9 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
+    "prepublish": "tsc", 
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,7 +15,7 @@
   },
   "dependencies": {
     "firebase": "^2.3.2",
-    "@reactivex/rxjs": "5.0.0-beta.1"
+    "rxjs": "~5.0.0-beta.1"
   },
   "typings": "./index.d.ts",
   "keywords": [],

@@ -1,4 +1,4 @@
-import {Observable, Subscriber} from '@reactivex/rxjs'
+import {Observable, Subscriber} from 'rxjs'
 import * as Firebase from 'firebase'
 
 export enum EventType {
