@@ -83,6 +83,23 @@ export class RxFirebase {
 		})
 	}
     
+    rx_push(data: any): Observable<{}>{
+        let self = this;
+        return new Observable((subscriber: Subscriber<{}>) => {
+            self.ref.push(data, (err) => {
+                if(err != null){
+					subscriber.error(err);
+				}else{
+					subscriber.next({});
+					subscriber.complete();
+				}
+            })
+            return () => {
+				
+			}
+        })
+    }
+    
     rx_set(data: any): Observable<{}>{
         let self = this;
 		return new Observable((subscriber: Subscriber<{}>) => {
