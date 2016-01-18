@@ -80,6 +80,22 @@ var RxFirebase = (function () {
             return function () { };
         });
     };
+    RxFirebase.prototype.rx_push = function (data) {
+        var self = this;
+        return new rxjs_1.Observable(function (subscriber) {
+            self.ref.push(data, function (err) {
+                if (err != null) {
+                    subscriber.error(err);
+                }
+                else {
+                    subscriber.next({});
+                    subscriber.complete();
+                }
+            });
+            return function () {
+            };
+        });
+    };
     RxFirebase.prototype.rx_set = function (data) {
         var self = this;
         return new rxjs_1.Observable(function (subscriber) {

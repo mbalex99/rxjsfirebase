@@ -27,6 +27,7 @@ export declare class RxFirebase {
     rx_observeAuth(): Observable<FirebaseAuthData>;
     rx_observeConnectionStatus(): Observable<boolean>;
     rx_remove(): Observable<{}>;
+    rx_push(data: any): Observable<{}>;
     rx_set(data: any): Observable<{}>;
     rx_update(data: any): Observable<{}>;
     rx_authWithCustomToken(customToken: string): Observable<FirebaseAuthData>;
