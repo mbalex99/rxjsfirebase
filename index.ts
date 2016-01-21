@@ -196,6 +196,11 @@ export class RxFirebase {
         return new RxFirebase(newQuery);
     }
     
+    equalTo(value: string, key?: string){
+        let newQuery = this.query.equalTo(value, key)
+        return new RxFirebase(newQuery);
+    }
+    
 	private convertToString(eventType: EventType) : string {
 		switch (eventType) {
 			case EventType.CHILD_ADDED:
