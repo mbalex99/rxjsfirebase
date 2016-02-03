@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 import * as Firebase from 'firebase';
 export declare enum EventType {
     CHILD_ADDED = 0,
@@ -38,5 +38,6 @@ export declare class RxFirebase {
     limitToLast(limit: number): RxFirebase;
     startAt(value: string, key?: string): RxFirebase;
     endAt(value: string, key?: string): RxFirebase;
+    equalTo(value: string, key?: string): RxFirebase;
     private convertToString(eventType);
 }

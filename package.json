@@ -1,6 +1,6 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
     "prepublish": "tsc", 
