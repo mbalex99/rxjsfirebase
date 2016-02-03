@@ -1,6 +1,6 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
     "prepublish": "tsc", 
@@ -13,11 +13,10 @@
   "typescript": {
     "definition": "index.d.ts"
   },
-  "dependencies": {
+  "peerDependencies": {
     "firebase": "^2.4.0",
     "rxjs": "5.0.0-beta.0"
   },
-  "typings": "./index.d.ts",
   "keywords": [],
   "author": "Maximilian Alexander <mbalex99@gmail.com> (http://blog.edenmsg.com/)",
   "license": "MIT"
