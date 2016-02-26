@@ -1,6 +1,6 @@
 {
   "name": "rxjsfirebase",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
     "prepublish": "tsc", 
@@ -11,8 +11,8 @@
     "url": "https://github.com/mbalex99/rxjsfirebase"
   },
   "dependencies": {
-    "firebase": "^2.4.0",
-    "rxjs": "5.0.0-beta.0"
+    "firebase": "^2.4.1",
+    "rxjs": "5.0.0-beta.2"
   },
   "keywords": [],
   "author": "Maximilian Alexander <mbalex99@gmail.com> (http://blog.edenmsg.com/)",

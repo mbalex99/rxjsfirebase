@@ -1,22 +1,13 @@
 import {Observable, Subscriber} from 'rxjs/Rx'
 import * as Firebase from 'firebase'
 
+export interface ISnapshotWithSisterKey {
+    snapshot: FirebaseDataSnapshot,
+    siblingKey: string
+}
+
 export enum EventType {
 	CHILD_ADDED, CHILD_REMOVED, CHILD_CHANGED, CHILD_MOVED, VALUE
-}
-
-export interface RxFirebaseResponse {
-    snapshot: FirebaseDataSnapshot
-	siblingKey: string
-}
-
-export class RxFirebasePayload implements RxFirebaseResponse {
-	snapshot: FirebaseDataSnapshot
-	siblingKey: string
-	constructor(snapshot: FirebaseDataSnapshot, siblingKey: string){
-		this.snapshot = snapshot;
-		this.siblingKey = siblingKey;
-	}
 }
 
 export class RxFirebase {
@@ -36,7 +27,7 @@ export class RxFirebase {
 	query: FirebaseQuery
 	constructor(query: FirebaseQuery)
     {
-		this.query = query
+		this.query = query;
 	}
 	
 	child(path: string): RxFirebase {
@@ -59,14 +50,6 @@ export class RxFirebase {
 			}
 		});
 	}
-    
-    rx_observeConnectionStatus(): Observable<boolean> {
-        var self = this
-        var rootRef = new RxFirebase(self.ref.root());
-        return rootRef.child('.info').child('connected').rx_observe(EventType.VALUE).map(payload => {
-            return payload.snapshot.val() != null;
-        });
-    }
 	
 	rx_remove(): Observable<{}> {
 		let self = this;
@@ -83,14 +66,14 @@ export class RxFirebase {
 		})
 	}
     
-    rx_push(data: any): Observable<{}>{
+    rx_push(data: any): Observable<RxFirebase>{
         let self = this;
-        return new Observable((subscriber: Subscriber<{}>) => {
-            self.ref.push(data, (err) => {
+        return new Observable((subscriber: Subscriber<RxFirebase>) => {
+            var newRef = self.ref.push(data, (err) => {
                 if(err != null){
 					subscriber.error(err);
 				}else{
-					subscriber.next({});
+					subscriber.next(new RxFirebase(newRef));
 					subscriber.complete();
 				}
             })
@@ -148,13 +131,12 @@ export class RxFirebase {
         })
     }
     
-	rx_observe(eventType: EventType) : Observable<RxFirebaseResponse> {
+	rx_observe(eventType: EventType) : Observable<FirebaseDataSnapshot> {
 		var self = this;
-        
-        
-		return new Observable((subscriber : Subscriber<RxFirebaseResponse>) => {
+       
+		return new Observable((subscriber : Subscriber<FirebaseDataSnapshot>) => {
 			var callback = (snapshot: FirebaseDataSnapshot, siblingKey: string) => {
-				subscriber.next(new RxFirebasePayload(snapshot, siblingKey))
+				subscriber.next(snapshot)
 			}
 			self.query.on(self.convertToString(eventType), callback, err => {
 				subscriber.error(err);
@@ -164,6 +146,26 @@ export class RxFirebase {
 			}
 		});
 	}
+    
+    
+    
+    rx_observeWithSiblingKey(eventType: EventType): Observable<ISnapshotWithSisterKey> {
+        var self = this;
+        return new Observable((subscriber: Subscriber<ISnapshotWithSisterKey>) => {
+            var callback = (snapshot: FirebaseDataSnapshot, siblingKey: string) => {
+				subscriber.next({
+                    snapshot: snapshot,
+                    siblingKey: siblingKey
+                })
+			}
+			self.query.on(self.convertToString(eventType), callback, err => {
+				subscriber.error(err);
+			})
+			return () => {
+				self.query.off(self.convertToString(eventType), callback);		
+			}
+        })
+    }
     
     
     orderByChild(key: string) : RxFirebase {
@@ -205,19 +207,14 @@ export class RxFirebase {
 		switch (eventType) {
 			case EventType.CHILD_ADDED:
 				return "child_added"
-				break;
 			case EventType.CHILD_CHANGED:
 				return "child_changed"
-				break
 			case EventType.CHILD_MOVED:
 				return "child_moved"
-				break
 			case EventType.CHILD_REMOVED:
 				return "child_removed"
-				break
 			case EventType.VALUE:
 				return "value"
-				break
 			default:
 				break;
 		}

@@ -1,3 +1,4 @@
+"use strict";
 var Rx_1 = require('rxjs/Rx');
 (function (EventType) {
     EventType[EventType["CHILD_ADDED"] = 0] = "CHILD_ADDED";
@@ -7,14 +8,6 @@ var Rx_1 = require('rxjs/Rx');
     EventType[EventType["VALUE"] = 4] = "VALUE";
 })(exports.EventType || (exports.EventType = {}));
 var EventType = exports.EventType;
-var RxFirebasePayload = (function () {
-    function RxFirebasePayload(snapshot, siblingKey) {
-        this.snapshot = snapshot;
-        this.siblingKey = siblingKey;
-    }
-    return RxFirebasePayload;
-})();
-exports.RxFirebasePayload = RxFirebasePayload;
 var RxFirebase = (function () {
     function RxFirebase(query) {
         this.query = query;
@@ -58,13 +51,6 @@ var RxFirebase = (function () {
             };
         });
     };
-    RxFirebase.prototype.rx_observeConnectionStatus = function () {
-        var self = this;
-        var rootRef = new RxFirebase(self.ref.root());
-        return rootRef.child('.info').child('connected').rx_observe(EventType.VALUE).map(function (payload) {
-            return payload.snapshot.val() != null;
-        });
-    };
     RxFirebase.prototype.rx_remove = function () {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
@@ -83,12 +69,12 @@ var RxFirebase = (function () {
     RxFirebase.prototype.rx_push = function (data) {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
-            self.ref.push(data, function (err) {
+            var newRef = self.ref.push(data, function (err) {
                 if (err != null) {
                     subscriber.error(err);
                 }
                 else {
-                    subscriber.next({});
+                    subscriber.next(new RxFirebase(newRef));
                     subscriber.complete();
                 }
             });
@@ -146,7 +132,24 @@ var RxFirebase = (function () {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
             var callback = function (snapshot, siblingKey) {
-                subscriber.next(new RxFirebasePayload(snapshot, siblingKey));
+                subscriber.next(snapshot);
+            };
+            self.query.on(self.convertToString(eventType), callback, function (err) {
+                subscriber.error(err);
+            });
+            return function () {
+                self.query.off(self.convertToString(eventType), callback);
+            };
+        });
+    };
+    RxFirebase.prototype.rx_observeWithSiblingKey = function (eventType) {
+        var self = this;
+        return new Rx_1.Observable(function (subscriber) {
+            var callback = function (snapshot, siblingKey) {
+                subscriber.next({
+                    snapshot: snapshot,
+                    siblingKey: siblingKey
+                });
             };
             self.query.on(self.convertToString(eventType), callback, function (err) {
                 subscriber.error(err);
@@ -188,23 +191,18 @@ var RxFirebase = (function () {
         switch (eventType) {
             case EventType.CHILD_ADDED:
                 return "child_added";
-                break;
             case EventType.CHILD_CHANGED:
                 return "child_changed";
-                break;
             case EventType.CHILD_MOVED:
                 return "child_moved";
-                break;
             case EventType.CHILD_REMOVED:
                 return "child_removed";
-                break;
             case EventType.VALUE:
                 return "value";
-                break;
             default:
                 break;
         }
     };
     return RxFirebase;
-})();
+}());
 exports.RxFirebase = RxFirebase;

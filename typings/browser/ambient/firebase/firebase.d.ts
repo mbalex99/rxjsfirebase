@@ -1,3 +1,5 @@
+// Compiled using typings@0.6.8
+// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/e2251a6de4ec74c4c71cbb04baccdd261a643909/firebase/firebase.d.ts
 // Type definitions for Firebase API 2.0.2
 // Project: https://www.firebase.com/docs/javascript/firebase
 // Definitions by: Vincent Botone <https://github.com/vbortone/>, Shin1 Kashimura <https://github.com/in-async/>, Sebastien Dubois <https://github.com/dsebastien/>
