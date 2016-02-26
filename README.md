@@ -1,5 +1,8 @@
 #RXJS 5 (beta currently at Beta 2) wrapper around Firebase's API.
 
+Great with Angular2! Install using npm
+
+`npm install rxjsfirebase --save`
 
 **This project was built with TypeScript**
 To create an instance, you'll simply have to supply a native Firebase object to the constructor
