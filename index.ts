@@ -40,15 +40,15 @@ export class RxFirebase {
 	
 	rx_observeAuth(): Observable<FirebaseAuthData> {
 		var self = this;
-		return new Observable((subscriber: Subscriber<FirebaseAuthData>) => {
-			var listener = (authData : FirebaseAuthData) => {
+        return new Observable<FirebaseAuthData>((subscriber : Subscriber<FirebaseAuthData> ) => {
+            var listener = (authData : FirebaseAuthData) => {
 				subscriber.next(authData);
 			}
 			self.ref.onAuth(listener);
 			return () => {
 				self.ref.offAuth(listener);
 			}
-		});
+        })
 	}
 	
 	rx_remove(): Observable<{}> {
@@ -68,7 +68,7 @@ export class RxFirebase {
     
     rx_push(data: any): Observable<RxFirebase>{
         let self = this;
-        return new Observable((subscriber: Subscriber<RxFirebase>) => {
+        return new Observable<RxFirebase>((subscriber: Subscriber<RxFirebase>) => {
             var newRef = self.ref.push(data, (err) => {
                 if(err != null){
 					subscriber.error(err);
@@ -119,8 +119,8 @@ export class RxFirebase {
 	
     rx_authWithCustomToken(customToken: string) : Observable<FirebaseAuthData>{
         var self = this;
-        return new Observable((subscriber: Subscriber<FirebaseAuthData>) => {
-            self.ref.authWithCustomToken(customToken, (err, authData) => {
+        return new Observable<FirebaseAuthData>((subscriber: Subscriber<FirebaseAuthData>) => {
+            self.ref.authWithCustomToken(customToken, (err : Error, authData: FirebaseAuthData) => {
                 if(err){
                     subscriber.error(err);
                 }else{
@@ -133,8 +133,7 @@ export class RxFirebase {
     
 	rx_observe(eventType: EventType) : Observable<FirebaseDataSnapshot> {
 		var self = this;
-       
-		return new Observable((subscriber : Subscriber<FirebaseDataSnapshot>) => {
+		return new Observable<FirebaseDataSnapshot>((subscriber : Subscriber<FirebaseDataSnapshot>) => {
 			var callback = (snapshot: FirebaseDataSnapshot, siblingKey: string) => {
 				subscriber.next(snapshot)
 			}
@@ -151,12 +150,13 @@ export class RxFirebase {
     
     rx_observeWithSiblingKey(eventType: EventType): Observable<ISnapshotWithSisterKey> {
         var self = this;
-        return new Observable((subscriber: Subscriber<ISnapshotWithSisterKey>) => {
+        return new Observable<ISnapshotWithSisterKey>((subscriber: Subscriber<ISnapshotWithSisterKey>) => {
             var callback = (snapshot: FirebaseDataSnapshot, siblingKey: string) => {
-				subscriber.next({
+                var payload : ISnapshotWithSisterKey = {
                     snapshot: snapshot,
                     siblingKey: siblingKey
-                })
+                }
+				subscriber.next(payload)
 			}
 			self.query.on(self.convertToString(eventType), callback, err => {
 				subscriber.error(err);

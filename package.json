@@ -3,7 +3,7 @@
   "version": "1.0.20",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
-    "prepublish": "tsc", 
+    "prepublish": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -12,7 +12,10 @@
   },
   "dependencies": {
     "firebase": "^2.4.2",
-    "rxjs": "5.0.0-beta.4"
+    "rxjs": "~5.0.0-beta.2"
+  },
+  "devDependencies": {
+    "typescript": "1.8.10"
   },
   "keywords": [],
   "author": "Maximilian Alexander <mbalex99@gmail.com> (http://blog.edenmsg.com/)",

@@ -146,10 +146,11 @@ var RxFirebase = (function () {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
             var callback = function (snapshot, siblingKey) {
-                subscriber.next({
+                var payload = {
                     snapshot: snapshot,
                     siblingKey: siblingKey
-                });
+                };
+                subscriber.next(payload);
             };
             self.query.on(self.convertToString(eventType), callback, function (err) {
                 subscriber.error(err);
