@@ -188,17 +188,17 @@ export class RxFirebase {
         return new RxFirebase(newQuery);
     }
     
-    startAt(value: string, key?: string): RxFirebase {
+    startAt(value: any, key?: string): RxFirebase {
         let newQuery = this.query.startAt(value, key)
         return new RxFirebase(newQuery);
     }
     
-    endAt(value: string, key?: string): RxFirebase {
+    endAt(value: any, key?: string): RxFirebase {
         let newQuery = this.query.endAt(value, key)
         return new RxFirebase(newQuery);
     }
     
-    equalTo(value: string, key?: string){
+    equalTo(value: any, key?: string){
         let newQuery = this.query.equalTo(value, key)
         return new RxFirebase(newQuery);
     }
