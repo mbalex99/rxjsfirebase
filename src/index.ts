@@ -76,7 +76,7 @@ export class RxFirebaseView {
 	_query: Firebase.database.Query
 	public constructor(query: Firebase.database.Query)
     {
-		this.query = query;
+		this._query = query;
 	}
 	
 	child(path: string): RxFirebaseView {
