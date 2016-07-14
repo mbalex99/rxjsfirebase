@@ -22,7 +22,8 @@ export declare class RxFirebaseApp {
 export declare class RxFirebaseAuth {
     private _auth;
     constructor(auth: Firebase.auth.Auth);
-    createCustomToken(uid: string, additionalClaims: any): string;
+    createCustomToken(uid: string, additionalClaims?: any): string;
+    rx_verifyIdToken(idToken: any): Observable<any>;
     rx_signInWithCustomToken(token: string): Observable<Firebase.User>;
     rx_signOut(): Observable<void>;
     rx_onAuthStateChanged(): Observable<Firebase.User>;
