@@ -1,5 +1,6 @@
 "use strict";
 var Rx_1 = require('rxjs/Rx');
+var Firebase = require('firebase');
 (function (EventType) {
     EventType[EventType["CHILD_ADDED"] = 0] = "CHILD_ADDED";
     EventType[EventType["CHILD_REMOVED"] = 1] = "CHILD_REMOVED";
@@ -8,50 +9,92 @@ var Rx_1 = require('rxjs/Rx');
     EventType[EventType["VALUE"] = 4] = "VALUE";
 })(exports.EventType || (exports.EventType = {}));
 var EventType = exports.EventType;
-var RxFirebase = (function () {
-    function RxFirebase(query) {
-        this.query = query;
+var RxFirebaseApp = (function () {
+    function RxFirebaseApp(options, name) {
+        if (name === void 0) { name = null; }
+        this._appReference = Firebase.initializeApp(options, name);
     }
-    Object.defineProperty(RxFirebase.prototype, "ref", {
+    Object.defineProperty(RxFirebaseApp.prototype, "appReference", {
         get: function () {
-            return this.query.ref();
+            return this._appReference;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(RxFirebase.prototype, "uid", {
+    Object.defineProperty(RxFirebaseApp.prototype, "database", {
         get: function () {
-            return this.ref.getAuth().uid;
+            return this._appReference.database();
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(RxFirebase.prototype, "authData", {
+    Object.defineProperty(RxFirebaseApp.prototype, "auth", {
         get: function () {
-            return this.ref.getAuth();
+            return new RxFirebaseAuth(this._appReference.auth());
         },
         enumerable: true,
         configurable: true
     });
-    RxFirebase.prototype.child = function (path) {
-        return new RxFirebase(this.ref.child(path));
+    Object.defineProperty(RxFirebaseApp.prototype, "rootView", {
+        get: function () {
+            return new RxFirebaseView(this._appReference.database().ref());
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return RxFirebaseApp;
+}());
+exports.RxFirebaseApp = RxFirebaseApp;
+var RxFirebaseAuth = (function () {
+    function RxFirebaseAuth(auth) {
+        this._auth = auth;
+    }
+    RxFirebaseAuth.prototype.rx_signInWithCustomToken = function (token) {
+        return Rx_1.Observable.fromPromise(this._auth.signInWithCustomToken(token));
     };
-    RxFirebase.prototype.unauth = function () {
-        this.ref.unauth();
+    RxFirebaseAuth.prototype.rx_signOut = function () {
+        return Rx_1.Observable.fromPromise(this._auth.signOut());
     };
-    RxFirebase.prototype.rx_observeAuth = function () {
+    RxFirebaseAuth.prototype.rx_onAuthStateChanged = function () {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
-            var listener = function (authData) {
-                subscriber.next(authData);
-            };
-            self.ref.onAuth(listener);
+            var listenerReference = self._auth.onAuthStateChanged(function (user) {
+                subscriber.next(user);
+            }, function (err) {
+                subscriber.error(err);
+            }, function () {
+                subscriber.complete();
+            });
             return function () {
-                self.ref.offAuth(listener);
+                listenerReference(); // unsubscriber
             };
         });
     };
-    RxFirebase.prototype.rx_remove = function () {
+    return RxFirebaseAuth;
+}());
+exports.RxFirebaseAuth = RxFirebaseAuth;
+var RxFirebaseView = (function () {
+    function RxFirebaseView(query) {
+        this.query = query;
+    }
+    Object.defineProperty(RxFirebaseView.prototype, "query", {
+        get: function () {
+            return this._query;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RxFirebaseView.prototype, "ref", {
+        get: function () {
+            return this.query.ref;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RxFirebaseView.prototype.child = function (path) {
+        return new RxFirebaseView(this.query.ref.child(path));
+    };
+    RxFirebaseView.prototype.rx_remove = function () {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
             self.ref.remove(function (err) {
@@ -66,7 +109,7 @@ var RxFirebase = (function () {
             return function () { };
         });
     };
-    RxFirebase.prototype.rx_push = function (data) {
+    RxFirebaseView.prototype.rx_push = function (data) {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
             var newRef = self.ref.push(data, function (err) {
@@ -74,7 +117,7 @@ var RxFirebase = (function () {
                     subscriber.error(err);
                 }
                 else {
-                    subscriber.next(new RxFirebase(newRef));
+                    subscriber.next(new RxFirebaseView(newRef));
                     subscriber.complete();
                 }
             });
@@ -82,10 +125,10 @@ var RxFirebase = (function () {
             };
         });
     };
-    RxFirebase.prototype.rx_set = function (data) {
+    RxFirebaseView.prototype.rx_set = function (data) {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
-            self.ref.set(data, function (err) {
+            self.query.ref.set(data, function (err) {
                 if (err != null) {
                     subscriber.error(err);
                 }
@@ -98,7 +141,7 @@ var RxFirebase = (function () {
             };
         });
     };
-    RxFirebase.prototype.rx_update = function (data) {
+    RxFirebaseView.prototype.rx_update = function (data) {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
             self.ref.update(data, function (err) {
@@ -114,35 +157,21 @@ var RxFirebase = (function () {
             };
         });
     };
-    RxFirebase.prototype.rx_authWithCustomToken = function (customToken) {
-        var self = this;
-        return new Rx_1.Observable(function (subscriber) {
-            self.ref.authWithCustomToken(customToken, function (err, authData) {
-                if (err) {
-                    subscriber.error(err);
-                }
-                else {
-                    subscriber.next(authData);
-                    subscriber.complete();
-                }
-            });
-        });
-    };
-    RxFirebase.prototype.rx_observe = function (eventType) {
+    RxFirebaseView.prototype.rx_observe = function (eventType) {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
             var callback = function (snapshot, siblingKey) {
                 subscriber.next(snapshot);
             };
-            self.query.on(self.convertToString(eventType), callback, function (err) {
+            self.query.on(RxFirebaseView.convertToString(eventType), callback, function (err) {
                 subscriber.error(err);
             });
             return function () {
-                self.query.off(self.convertToString(eventType), callback);
+                self.query.off(RxFirebaseView.convertToString(eventType), callback);
             };
         });
     };
-    RxFirebase.prototype.rx_observeWithSiblingKey = function (eventType) {
+    RxFirebaseView.prototype.rx_observeWithSiblingKey = function (eventType) {
         var self = this;
         return new Rx_1.Observable(function (subscriber) {
             var callback = function (snapshot, siblingKey) {
@@ -152,43 +181,43 @@ var RxFirebase = (function () {
                 };
                 subscriber.next(payload);
             };
-            self.query.on(self.convertToString(eventType), callback, function (err) {
+            self.query.on(RxFirebaseView.convertToString(eventType), callback, function (err) {
                 subscriber.error(err);
             });
             return function () {
-                self.query.off(self.convertToString(eventType), callback);
+                self.query.off(RxFirebaseView.convertToString(eventType), callback);
             };
         });
     };
-    RxFirebase.prototype.orderByChild = function (key) {
+    RxFirebaseView.prototype.orderByChild = function (key) {
         var newQuery = this.query.orderByChild(key);
-        return new RxFirebase(newQuery);
+        return new RxFirebaseView(newQuery);
     };
-    RxFirebase.prototype.orderByValue = function () {
+    RxFirebaseView.prototype.orderByValue = function () {
         var newQuery = this.query.orderByValue();
-        return new RxFirebase(newQuery);
+        return new RxFirebaseView(newQuery);
     };
-    RxFirebase.prototype.orderByPriority = function () {
+    RxFirebaseView.prototype.orderByPriority = function () {
         var newQuery = this.query.orderByPriority();
-        return new RxFirebase(newQuery);
+        return new RxFirebaseView(newQuery);
     };
-    RxFirebase.prototype.limitToLast = function (limit) {
+    RxFirebaseView.prototype.limitToLast = function (limit) {
         var newQuery = this.query.limitToLast(limit);
-        return new RxFirebase(newQuery);
+        return new RxFirebaseView(newQuery);
     };
-    RxFirebase.prototype.startAt = function (value, key) {
+    RxFirebaseView.prototype.startAt = function (value, key) {
         var newQuery = this.query.startAt(value, key);
-        return new RxFirebase(newQuery);
+        return new RxFirebaseView(newQuery);
     };
-    RxFirebase.prototype.endAt = function (value, key) {
+    RxFirebaseView.prototype.endAt = function (value, key) {
         var newQuery = this.query.endAt(value, key);
-        return new RxFirebase(newQuery);
+        return new RxFirebaseView(newQuery);
     };
-    RxFirebase.prototype.equalTo = function (value, key) {
+    RxFirebaseView.prototype.equalTo = function (value, key) {
         var newQuery = this.query.equalTo(value, key);
-        return new RxFirebase(newQuery);
+        return new RxFirebaseView(newQuery);
     };
-    RxFirebase.prototype.convertToString = function (eventType) {
+    RxFirebaseView.convertToString = function (eventType) {
         switch (eventType) {
             case EventType.CHILD_ADDED:
                 return "child_added";
@@ -204,6 +233,6 @@ var RxFirebase = (function () {
                 break;
         }
     };
-    return RxFirebase;
+    return RxFirebaseView;
 }());
-exports.RxFirebase = RxFirebase;
+exports.RxFirebaseView = RxFirebaseView;
