@@ -37,6 +37,11 @@ export class RxFirebaseAuth {
 	public constructor(auth: Firebase.auth.Auth){
 		this._auth = auth;
 	}
+
+	public createCustomToken(uid: string, additionalClaims: any) : string {
+		return (<any>this._auth).createCustomToken(uid, additionalClaims);
+	}
+
 	public rx_signInWithCustomToken(token: string) : Observable<Firebase.User>{
 		return Observable.fromPromise<Firebase.User>(this._auth.signInWithCustomToken(token))
 	}
