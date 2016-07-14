@@ -1,9 +1,9 @@
 {
   "name": "rxjsfirebase",
-  "main": "lib/index.ts",
-  "typings": "lib/index",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "files": [
-    "lib/"
+    "lib"
   ],
   "version": "3.2.1",
   "description": "RxJS Beta 5 wrapper around firebase",
