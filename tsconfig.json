@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "noLib": false,
+    "target": "es5",
+    "outDir": "lib",
     "sourceMap": false,
+    "declaration": true,
     "module": "commonjs",
-    "moduleResolution": "node",
-    "declaration": false,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "es5"
+    "removeComments": false
   },
   "exclude": [
-      "node_modules"
+    "node_modules",
+    "test",
+    "lib",
+    ".build"
   ]
 }

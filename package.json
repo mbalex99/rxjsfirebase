@@ -1,6 +1,11 @@
 {
   "name": "rxjsfirebase",
-  "version": "3.2.0",
+  "main": "lib/index.ts",
+  "typings": "lib/index",
+  "files": [
+    "lib/"
+  ],
+  "version": "3.2.0.1",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
     "prepublish": "tsc",
