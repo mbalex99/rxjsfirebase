@@ -17,7 +17,7 @@ export class RxFirebaseApp {
 		return this._appReference;
 	}
 	
-	constructor(options: any, name: string = null){
+	constructor(options: any, name: string = "rxfirebase"){
 		this._appReference = Firebase.initializeApp(options, name)
 	}
 	public get database() : Firebase.database.Database {
