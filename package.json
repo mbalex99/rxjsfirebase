@@ -5,7 +5,7 @@
   "files": [
     "lib/"
   ],
-  "version": "3.2.0.1",
+  "version": "3.2.1",
   "description": "RxJS Beta 5 wrapper around firebase",
   "scripts": {
     "prepublish": "tsc",
