@@ -38,8 +38,12 @@ export class RxFirebaseAuth {
 		this._auth = auth;
 	}
 
-	public createCustomToken(uid: string, additionalClaims: any) : string {
+	public createCustomToken(uid: string, additionalClaims: any = {}) : string {
 		return (<any>this._auth).createCustomToken(uid, additionalClaims);
+	}
+
+	public rx_verifyIdToken(idToken) : Observable<any> {
+		return Observable.fromPromise((<any>this._auth).verifyIdToken(idToken))
 	}
 
 	public rx_signInWithCustomToken(token: string) : Observable<Firebase.User>{
