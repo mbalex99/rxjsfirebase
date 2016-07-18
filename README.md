@@ -1,4 +1,4 @@
-#RXJS 5 (beta currently at Beta 6) wrapper around Firebase's API.
+#Firebase version 3 + RXJS 5 (beta currently at Beta 6) wrapper around Firebase's API.
 
 Works great with Angular2! Install using npm, you don't need typings since it's already packaged with the project.
 
