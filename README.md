@@ -1,25 +1,33 @@
-#RXJS 5 (beta currently at Beta 2) wrapper around Firebase's API.
+#RXJS 5 (beta currently at Beta 6) wrapper around Firebase's API.
 
-Great with Angular2! Install using npm
+Works great with Angular2! Install using npm, you don't need typings since it's already packaged with the project.
 
 `npm install rxjsfirebase --save`
 
-**This project was built with TypeScript**
+**Works on ES5 but also with ES6 and TypeScript**
 To create an instance, you'll simply have to supply a native Firebase object to the constructor
 
 ```javascript
-    import {RxFirebase, EventType} from 'rxjsfirebase'
-    import * as Firebase from 'firebase'
-    
-    var rootref = new Firebase("MY_FIREBASE_URL");
-    var rx_rootRef = new RxFirebase(firebase);
+    import {RxFirebaseApp, RxFirebaseAuth, RxFirebaseView, EventType} from 'rxjsfirebase'
+
+    var config = config = {
+        apiKey: '<your-api-key>',
+        authDomain: '<your-auth-domain>',
+        databaseURL: '<your-database-url>',
+        storageBucket: '<your-storage-bucket>'
+    }
+
+    var applicationInstance = new RxFirebaseApp(config);
+    // or you can give the instance a name:
+    var applicationInstance = new RxFirebaseApp(config, "myAppInstanceName");
 ```
- 
-I tried to port almost all the methods to be Observable friendly. 
 
-#Returning Child Paths and Queries
+#Note
 
-Getting a child path is exactly the same as the original objects. You can always call
+I made an opinionated effort to name data-endpoints as **RxFirebaseView**.
+The RxFirebaseView is essentially a `ref` or `query` in the old Firebase documentation.
+The logic is that it's some sort of database-path location that you can observe. 
+It has all the methods that you love like
 
 `child(mySubPath)`
 
@@ -43,7 +51,7 @@ Getting a child path is exactly the same as the original objects. You can always
 
 `limit`
 
-`ref`
+
 
 #Observing Values
 
@@ -63,7 +71,7 @@ The enum as these values:
 ```javascript
     import {EventType} from 'rxjsfirebase'
 
-    rx_rootref.rx_observe(EventType.CHILD_ADDED)
+    viewReference.rx_observe(EventType.CHILD_ADDED)
         .subscribe((snapshot) => {
             console.log("Completed observing snapshot: ", snapshot.val())
         }, (err) => {
@@ -74,10 +82,10 @@ The enum as these values:
 
 #Observing Values Once
 
-To keep respectful to RxJS, we simply just fire a `take(1)` to observe the value once. 
+To keep the API respectful to RxJS, we simply just fire a `take(1)` to observe the value once. 
 
 ```javascript
-    rx_rootref.rx_observe(EventType.CHILD_ADDED).take(1)
+    viewReference.rx_observe(EventType.CHILD_ADDED).take(1)
         .subscribe((snapshot) => {
             console.log("Completed observing snapshot just once: ", snapshot.val())
         }, (err) => {
@@ -88,9 +96,10 @@ To keep respectful to RxJS, we simply just fire a `take(1)` to observe the value
 #Observing Values with a Sister Key
 
 This is actually a separate method: `rx_observeWithSiblingKey` and it returns an object with the keys `snapshot` and `siblingKey`
-Remember the sibling key might be `null`
+** Remember the sibling key might be `null` ** 
+
 ```javascript
-    rx_rootref.rx_observeWithSiblingKey(EventType.CHILD_ADDED)
+    viewReference.rx_observeWithSiblingKey(EventType.CHILD_ADDED)
         .subscribe(snapshotWithKey => {
             console.log("snapshot", snapshotWithKey.snapshot)
             console.log("siblingKey (might be null!)", snapshotWithKey.siblingKey)
@@ -102,7 +111,7 @@ Remember the sibling key might be `null`
 This will return the authData. This does not throw an error if you are not authenticated. 
 
 ```javascript
-    rx_rootRef.rx_observeAuth().subscribe(authData => {
+    applicationInstance.auth.rx_observeAuth().subscribe(authData => {
         if (authData) {
             console.log("User " + authData.uid + " is logged in with " + authData.provider);
         } else {
@@ -116,7 +125,7 @@ This will return the authData. This does not throw an error if you are not authe
 But this one will wrap that callback into an Observable
 
 ```javascript
-    rx_rootref.rx_set(myValue)
+    viewReference.rx_set(myValue)
         .subscribe(() => {
             console.log("Completed setting the value at this ref")
         }, (err) => {
@@ -129,7 +138,7 @@ But this one will wrap that callback into an Observable
 But this one will wrap that callback into an `Observable<{}>`
 
 ```javascript
-    rx_rootref.rx_update(valuesToUpdate)
+    viewReference.rx_update(valuesToUpdate)
         .subscribe(() => {
             console.log("Completed updating values at this ref")
         }, (err) => {
@@ -139,11 +148,11 @@ But this one will wrap that callback into an `Observable<{}>`
 
 #Push Values  
 
-But this one will wrap that callback into an `Observable<RxFirebase>`
+But this one will wrap that callback into an `Observable<RxFirebaseView>`
 The RxFirebase instance is the location of the new ref that was pushed
 
 ```javascript
-    rx_rootref.rx_push(myValue)
+    viewReference.rx_push(myValue)
         .subscribe(newFirebaseRef => {
             console.log("Completed pushing and it's located at this ref", newFirebaseRef)
         }, (err) => {
